@@ -1,0 +1,325 @@
+<!--
+
+GUI Script to make Creating phones easier
+
+Author: Daniel Gardner
+
+ 
+
+ 
+
+-->
+
+<html>
+
+<head>
+
+<title>Automation Tool</title>
+
+<HTA:APPLICATION
+
+                APPLICATIONNAME="Automation Tool"
+
+                SCROLL="No"
+
+                SINGLEINSTANCE="yes"
+
+                MaximizeButton = "No"
+
+                MinimizeButton = "Yes"
+
+>  
+
+</head>
+
+ 
+
+<script language="VBScript">
+
+                sub Window_onLoad
+
+                                window.resizeTo 500,500
+
+                End Sub
+
+               
+
+                'Function To LDAP
+
+                Sub CreateLDAPFile
+
+                if CUCMfolder.value <> "0" Then
+
+                                UserIDTrimmed = Trim(UserID.Value)
+
+                                outfile = "\\gbw04333.hbeu.adroot.hsbc\data_in\cluster\FFF\" & CUCMfolder.value & "\" & UserIDTrimmed & ".csv"
+
+                                valuetoprint = "StaffID" & Vbnewline & UserIDTrimmed
+
+ 
+
+                                set objFSO = CreateObject("Scripting.FileSystemObject")
+
+                                If objFSO.FileExists(outfile) Then
+
+                                                Set objFile = objFSO.OpenTextFile(outfile, 8)
+
+                                                objFile.WriteLine valuetoprint
+
+                                                objFile.Close
+
+                                                MsgBox "User Already added, ReAdded " & valuetoprint & " to file: " & outfile
+
+                                Else
+
+                                                Set objFile = objFSO.CreateTextFile(outfile)
+
+                                                objFile.WriteLine valuetoprint
+
+                                                objFile.Close
+
+                                                MsgBox "Added " & valuetoprint & " to file: " & outfile
+
+                                End If
+
+                End If
+
+                End Sub
+
+               
+
+                'Changes what the user sees based on the value of Ticket Type Field
+
+                sub SelectTicketType
+
+                                if Document.getElementByID("TicketType").Value = "Select" then
+
+                                                Document.getElementByID("extrainfo").innerHTML =""
+
+                                                Document.getElementByID("WorkingConfirmation").innerHTML =""
+
+                                end if
+
+                                if Document.getElementByID("TicketType").Value = "LDAP" then
+
+                                                Document.getElementByID("extrainfo").innerHTML = "CUCM: <select size='1' name='CUCMfolder'><option value='0'>Select</option><option value='1UY'>1UY</option><option value='201'>201</option><option value='202'>202</option><option value='203'>203</option><option value='204'>204</option><option value='205'>205</option><option value='206'>206</option><option value='207'>207</option><option value='208'>208</option><option value='209'>209</option><option value='2BM'>2BM</option><option value='2CH'>2CH</option><option value='2DZ'>2DZ</option><option value='2MT'>2MT</option><option value='2OM'>2OM</option><option value='2SA'>2SA</option><option value='2TR'>2TR</option><option value='2ZA'>2ZA</option><option value='301'>301</option><option value='302'>302</option><option value='303'>303</option><option value='304'>304</option><option value='305'>305</option><option value='306'>306</option><option value='307'>307</option><option value='308'>308</option><option value='309'>309</option><option value='310'>310</option>               <br/>                <option value='MX1'>MX1</option><option value='MX2'>MX2</option><option value='US1'>US1</option><option value='US2'>US2</option><option value='US3'>US3</option><br/>                <br/></select> &nbsp<br/>User ID:<input type='text' name='UserID' size='30'><br/>&nbsp;&nbsp;&nbsp;<br/><input id=runbutton type='button' value='Create CSV' name='run_button' onClick='CreateLDAPFile'<br/><br/>"
+
+                                                Document.getElementByID("WorkingConfirmation").innerHTML =""
+
+                                end if
+
+                                if Document.getElementByID("TicketType").Value = "Jabber" then
+
+                                                Document.getElementByID("extrainfo").innerHTML = "Call Manager:&nbsp&nbsp&nbsp&nbsp&nbsp<select size='1' name='CUCM'><br/>               <option value='HO1'>HO1</option><option value='HO8'>HO8</option><br/><option value='ME7'>ME7</option> <option value='EU3'>EU3</option> <option value='BR1'>BR1</option> <option value='BR2'>BR2</option> <option value='HK1'>HK1</option> <option value='HK2'>HK2</option> <option value='CL3'>CL3</option> <option value='CL10'>CL10</option> <option value='CL4'>CL4</option> <option value='CL5'>CL5</option> <option value='CL6'>CL6</option> <option value='CL7'>CL7</option> <option value='US1'>US1</option> <option value='US2'>US2</option> <option value='US3'>US3</option> <option value='MX1'>MX1</option> <option value='MX2'>MX2</option>   </select><br/>Username:&nbsp<input type='text' name='username' size='30'>&nbsp<br/>Password:&nbsp<input type='password' name='cucmpassword' size='30'><br/><br/>Jabber MAC to Copy:&nbsp<input type='text' name='Usertocopy' size='30'> <br/>New Jabber Name:&nbsp<input type='text' name='NewProfileName' size='30'><br/>New Profile Number:&nbsp<input type='text' name='NewProfileNumber' size='30'><br/>New Profile Mask (Optional):&nbsp<input type='text' name='NewProfileExternalMask' size='30'><br/>New User's ID:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type='text' name='NewUserID' size='30'><br/>New User's Full Name:&nbsp<input type='text' name='NewUserFullName' size='30'><br/>GSR Number:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type='text' name='GSRNumber' size='30'><br/>Level of Access:&nbsp&nbsp&nbsp&nbsp&nbsp<select size='1' name='Accesslevel'>               <option value='5'>N/A</option>              <option value='0'>0</option>   <option value='1'>1</option>   <option value='2'>2</option>    <option value='3'>3</option>   <option value='4'>4</option> </select>   <br/><br/><input id=runbutton type='button' value='Create Phone' name='run_button' onClick='CreatePhone'><br/><input type='reset' Value='Clear' Onclick=ClearFields>"
+
+                                                Document.getElementByID("WorkingConfirmation").innerHTML =""
+
+                                end if
+
+                                if Document.getElementByID("TicketType").Value = "IPC" then
+
+                                                Document.getElementByID("extrainfo").innerHTML = "Call Manager:&nbsp&nbsp&nbsp&nbsp&nbsp<select size='1' name='CUCM'><br/>               <option value='HO1'>HO1</option><option value='HO8'>HO8</option><br/><option value='ME7'>ME7</option> <option value='EU3'>EU3</option> <option value='BR1'>BR1</option> <option value='BR2'>BR2</option> <option value='HK1'>HK1</option> <option value='HK2'>HK2</option> <option value='CL3'>CL3</option> <option value='CL10'>CL10</option> <option value='CL4'>CL4</option> <option value='CL5'>CL5</option> <option value='CL6'>CL6</option> <option value='CL7'>CL7</option> <option value='US1'>US1</option> <option value='US2'>US2</option> <option value='US3'>US3</option> <option value='MX1'>MX1</option> <option value='MX2'>MX2</option>   </select><br/>Username:&nbsp<input type='text' name='username' size='30'>&nbsp<br/>Password:&nbsp<input type='password' name='cucmpassword' size='30'><br/><br/>MAC of IPC to Copy:&nbsp<input type='text' name='Usertocopy' size='30'><input type='hidden' name='AccessLevel' value='false'> <br/>New IPC Name:&nbsp<input type='text' name='NewProfileName' size='30'><br/>New Profile Number:&nbsp<input type='text' name='NewProfileNumber' size='30'><br/>New Profile Mask(Optional):&nbsp<input type='text' name='NewProfileExternalMask' size='30'><br/>New User's ID:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type='text' name='NewUserID' size='30'><br/>New User's Full Name:&nbsp<input type='text' name='NewUserFullName' size='30'><br/>GSR Number:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type='text' name='GSRNumber' size='30'><br/><br/><br/><input id=runbutton type='button' value='Create Phone' name='run_button' onClick='CreatePhone'><br/><input type='reset' Value='Clear' Onclick=ClearFields>"
+
+                                                Document.getElementByID("WorkingConfirmation").innerHTML =""
+
+                                end if
+
+                end sub
+
+               
+
+                'Clears fields on button click
+
+                sub ClearFields
+
+                                Usertocopy.value = ""
+
+                                NewProfileName.value = ""
+
+                                NewProfileNumber.value = ""
+
+                                NewProfileExternalMask.value = ""
+
+                                NewUserID.value = ""
+
+                                NewUserFullName.value = ""
+
+                                GSRNumber.value = ""
+
+                                Document.getElementByID("WorkingConfirmation").innerHTML =""
+
+                end sub
+
+               
+
+                Sub TestSub
+
+                                Msgbox NewProfileName.Value & " " & NewProfileNumber.value
+
+                End Sub
+
+               
+
+                sub CreatePhone
+
+               
+
+                if NewProfileExternalMask.value = "" then
+
+                                NewProfileExternalMask.value = "false"
+
+                end if
+
+               
+
+                TrimmedCUCM = chr(34) + Trim(CUCM.value) + chr(34)
+
+                TrimmedUsertocopy = chr(34) + Trim(Usertocopy.value) + chr(34)
+
+                TrimmedNewProfileName = chr(34) + Trim(NewProfileName.value) + chr(34)
+
+                TrimmedNewProfileNumber = chr(34) + Trim(NewProfileNumber.value) + chr(34)
+
+                TrimmedNewProfileExternalMask = chr(34) + Trim(NewProfileExternalMask.value) + chr(34)
+
+                TrimmedAccessLevel = chr(34) + Trim(Accesslevel.value) + chr(34)
+
+                FullUserID = chr(34) + trim(NewUserID.value) + chr(34)
+
+                UserFullNameNew = chr(34) + trim(NewUserFullName.value) + chr(34)
+
+                FullGSRNumber = chr(34) + trim(GSRNumber.value) + chr(34)
+
+               
+
+               
+
+                'Calling a python script to create a new phone based on settings of a given user to copy. Arguments in order: 1. Call manager, 2 UserToCopy, 3. NewProfileName, 4. NewProfileNumber, 5. New Profile Mask, 6. LevelOfAccess, 7. NewUserID, 8. NewUserName, 9. GSRNumber
+
+                if NewUserID.value = "" then
+
+                                Document.getElementByID("WorkingConfirmation").innerHTML = "User ID is blank."
+
+                                exit sub
+
+                end if
+
+               
+
+                Document.getElementByID("WorkingConfirmation").innerHTML ="Attempting to create " + Trim(NewProfileName.value)
+
+                set fso = CreateObject("Scripting.FileSystemObject")'Used to check if files exist or if script needs to take them from shared files
+
+                if (fso.FileExists("python.exe")) Then
+
+                                                pythondotexe = "python.exe"
+
+                                else
+
+                                                pythondotexe = "\\ukhibmdata01\#UKHIBMDATA01\dpublic#\Cisco\Tools\Python27s\python.exe"
+
+                                end if
+
+               
+
+                if TicketType.Value = "Select" then
+
+                                Msgbox("Please select the desired phone type.")
+
+                elseif TicketType.value = "Jabber" then
+
+                               
+
+                                if (fso.FileExists("CreateJabberPhone.py")) Then
+
+                                                CreateJabberPhone = "CreateJabberPhone.py"
+
+                                else
+
+                                                CreateJabberPhone = "\\ukhibmdata01\#UKHIBMDATA01\dpublic#\Cisco\Tools\Python27s\CreateJabberPhone.py"
+
+                                end if
+
+               
+
+                                CreateObject("wscript.shell").Run pythondotexe & " " & CreateJabberPhone & " " & TrimmedCUCM & " " & TrimmedUsertocopy & " " & TrimmedNewProfileName & " " & TrimmedNewProfileNumber & " " & TrimmedNewProfileExternalMask & " " & TrimmedAccessLevel & " " & FullUserID & " " & UserFullNameNew & " " & FullGSRNumber & " " & username.value & " " & cucmpassword.value & "", 0, False  ' Run cmd to run python
+
+                elseif TicketType.value = "IPC" then
+
+                                if (fso.FileExists("CreateIPCPhone.py")) Then
+
+                                                                CreateIPCPhone = "CreateIPCPhone.py"
+
+                                                else
+
+                                                                CreateIPCPhone = " \\ukhibmdata01\#UKHIBMDATA01\dpublic#\Cisco\Tools\Python27s\CreateIPCPhone.py"
+
+                                                end if
+
+                                CreateObject("wscript.shell").Run pythondotexe & " " & CreateIPCPhone& " " & TrimmedCUCM & " " & TrimmedUsertocopy & " " & TrimmedNewProfileName & " " & TrimmedNewProfileNumber & " " & TrimmedNewProfileExternalMask & " " & FullUserID & " " & UserFullNameNew & " " & FullGSRNumber & " " & username.value & " " & cucmpassword.value & "", 0, False  ' Run cmd to run python
+
+                else
+
+                                Msgbox("How did you even get here?")
+
+                                WScript.Quit 1
+
+                end if
+
+               
+
+ 
+
+                end sub
+
+               
+
+               
+
+               
+
+               
+
+               
+
+               
+
+               
+
+               
+
+               
+
+               
+
+</script>
+
+ 
+
+<body bgcolor="#D5D8DC">
+
+Work Type:&nbsp
+
+<select size="1" id="TicketType" name="TicketType" onChange=SelectTicketType()>
+
+                <option value="Select">Select</option>
+
+                <option value="Jabber">Create Jabber</option>
+
+                <option value="IPC">Create IPC</option>
+
+                <option value="LDAP">LDAP</option>
+
+</select>
+
+ 
+
+<p id="extrainfo"></p>
+
+<br/>
+
+<p id="WorkingConfirmation"></p>
+
+</body>
+
+</html>
